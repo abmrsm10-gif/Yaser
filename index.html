@@ -27,6 +27,7 @@ animation:bgMove 12s ease infinite;
 100%{background-position:0% 50%;}
 }
 
+/* زر البداية */
 .start-screen{
 position:fixed;
 inset:0;
@@ -47,28 +48,69 @@ color:white;
 background:linear-gradient(45deg,#ff66c4,#ffd700);
 }
 
-.card{
-width:90%;
-max-width:430px;
-background:white;
-border-radius:30px;
+/* الكتاب */
+.book{
+width:320px;
+height:420px;
+position:relative;
+perspective:1500px;
+}
+
+.cover{
+width:100%;
+height:100%;
+position:absolute;
+transform-origin:left;
+transition:1.2s ease;
+border-radius:15px;
 overflow:hidden;
-text-align:center;
-border:5px solid gold;
-box-shadow:0 10px 40px rgba(0,0,0,0.25);
+box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.cover img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* فتح الكتاب */
+.book.open .cover{
+transform:rotateY(-140deg);
+}
+
+/* داخل الكتاب */
+.inside{
+position:absolute;
+width:100%;
+height:100%;
+background:white;
+border-radius:15px;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
 opacity:0;
 transform:scale(.8);
 transition:1s;
+padding:20px;
+text-align:center;
 }
 
-.card.show{
+.book.open .inside{
 opacity:1;
 transform:scale(1);
 }
 
-.card img{
-width:100%;
-display:block;
+/* نص داخلي */
+.inside h1{
+color:#b8860b;
+margin-bottom:10px;
+}
+
+.inside p{
+font-size:18px;
+color:#444;
+margin:6px 0;
 }
 
 /* قصاصات */
@@ -113,8 +155,20 @@ to{transform:scale(25);opacity:0;}
 <source src="wedding.mp3" type="audio/mpeg">
 </audio>
 
-<div class="card" id="card">
+<!-- الكتاب -->
+<div class="book" id="book">
+
+<div class="cover">
 <img src="invite.png">
+</div>
+
+<div class="inside">
+<h1>دعوة زفاف</h1>
+<p>يسرنا حضوركم لحفل الزفاف</p>
+<p>📅 7 حزيران 2026</p>
+<p>🕖 الساعة 7 مساءً</p>
+</div>
+
 </div>
 
 <script>
@@ -127,8 +181,11 @@ if(started) return;
 started=true;
 
 document.getElementById("startScreen").style.display="none";
-document.getElementById("card").classList.add("show");
 
+/* فتح الكتاب */
+document.getElementById("book").classList.add("open");
+
+/* تشغيل الموسيقى */
 const music=document.getElementById("music");
 music.play().catch(()=>{});
 
@@ -154,7 +211,7 @@ setTimeout(()=>c.remove(),6000);
 
 }
 
-/* انفجارات حقيقية */
+/* انفجارات */
 function firework(){
 
 const x=Math.random()*window.innerWidth;
