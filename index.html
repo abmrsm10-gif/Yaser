@@ -27,7 +27,6 @@ animation:bgMove 12s ease infinite;
 100%{background-position:0% 50%;}
 }
 
-/* شاشة البداية */
 .start-screen{
 position:fixed;
 inset:0;
@@ -48,7 +47,6 @@ color:white;
 background:linear-gradient(45deg,#ff66c4,#ffd700);
 }
 
-/* البطاقة */
 .card{
 width:90%;
 max-width:430px;
@@ -59,34 +57,18 @@ text-align:center;
 border:5px solid gold;
 box-shadow:0 10px 40px rgba(0,0,0,0.25);
 opacity:0;
-transform:translateY(40px) scale(.8);
+transform:scale(.8);
 transition:1s;
 }
 
 .card.show{
 opacity:1;
-transform:translateY(0) scale(1);
-}
-
-/* الصورة (تم الإصلاح هنا) */
-.card img{
-width:100%;
-height:auto;
-max-height:200px;
-object-fit:contain;
-display:block;
-opacity:0;
-transform:scale(1.2);
-animation:imgIn 1.2s ease forwards;
-animation-delay:.5s;
-background:white;
-}
-
-@keyframes imgIn{
-to{
-opacity:1;
 transform:scale(1);
 }
+
+.card img{
+width:100%;
+display:block;
 }
 
 /* قصاصات */
@@ -104,7 +86,7 @@ opacity:0;
 }
 }
 
-/* انفجارات */
+/* انفجار */
 .firework{
 position:absolute;
 width:4px;
@@ -123,17 +105,14 @@ to{transform:scale(25);opacity:0;}
 
 <body>
 
-<!-- زر البداية -->
 <div class="start-screen" id="startScreen">
 <button class="start-btn" onclick="start()">🎉 فتح الدعوة</button>
 </div>
 
-<!-- موسيقى -->
 <audio id="music" loop>
 <source src="wedding.mp3" type="audio/mpeg">
 </audio>
 
-<!-- البطاقة -->
 <div class="card" id="card">
 <img src="invite.png">
 </div>
@@ -150,7 +129,6 @@ started=true;
 document.getElementById("startScreen").style.display="none";
 document.getElementById("card").classList.add("show");
 
-/* تشغيل الموسيقى */
 const music=document.getElementById("music");
 music.play().catch(()=>{});
 
@@ -176,7 +154,7 @@ setTimeout(()=>c.remove(),6000);
 
 }
 
-/* انفجارات */
+/* انفجارات حقيقية */
 function firework(){
 
 const x=Math.random()*window.innerWidth;
