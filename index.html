@@ -66,6 +66,7 @@ transition:1.2s ease;
 border-radius:15px;
 overflow:hidden;
 box-shadow:0 10px 40px rgba(0,0,0,0.4);
+backface-visibility:hidden;
 z-index:3;
 }
 
@@ -77,7 +78,7 @@ object-fit:cover;
 
 /* فتح الكتاب */
 .book.open .cover{
-transform:rotateY(-140deg);
+transform:rotateY(-160deg);
 }
 
 /* داخل الكتاب */
@@ -96,9 +97,12 @@ opacity:0;
 transform:scale(.9);
 transition:1s;
 z-index:1;
+
+/* 🔥 إصلاح النص المقلوب */
+direction:rtl;
+unicode-bidi:plaintext;
 }
 
-/* عند الفتح يظهر الداخل */
 .book.open .inside{
 opacity:1;
 transform:scale(1);
@@ -107,7 +111,7 @@ transform:scale(1);
 /* الصورة داخل الكتاب */
 .inside img{
 width:100%;
-max-height:260px;
+max-height:240px;
 object-fit:contain;
 border-radius:10px;
 box-shadow:0 5px 20px rgba(0,0,0,0.2);
@@ -160,10 +164,12 @@ to{transform:scale(25);opacity:0;}
 
 <body>
 
+<!-- زر البداية -->
 <div class="start-screen" id="startScreen">
 <button class="start-btn" onclick="start()">🎉 فتح الدعوة</button>
 </div>
 
+<!-- موسيقى -->
 <audio id="music" loop>
 <source src="wedding.mp3" type="audio/mpeg">
 </audio>
@@ -175,7 +181,6 @@ to{transform:scale(25);opacity:0;}
 <img src="invite.png">
 </div>
 
-<!-- الصورة أصبحت داخل الكتاب -->
 <div class="inside">
 
 <img src="invite.png">
