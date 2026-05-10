@@ -1,140 +1,227 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>دعوة زفاف رومانسية</title>  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+body{
+  margin:0;
+  overflow:hidden;
+  font-family:Tahoma;
+  background:linear-gradient(135deg,#ffd6f6,#e0c3fc,#c2e9fb);
+  background-size:400% 400%;
+  animation:bgMove 12s ease infinite;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
 
-    body {
-      overflow: hidden;
-      font-family: Tahoma, sans-serif;
-      background: linear-gradient(to bottom, #fff8f8, #fff0f5);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
 
-    .card {
-      width: 90%;
-      max-width: 520px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 30px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      overflow: hidden;
-      text-align: center;
-      border: 5px solid #d4af37;
-      animation: zoomIn 1.5s ease;
-      position: relative;
-      z-index: 10;
-    }
+.card{
+  width:90%;
+  max-width:520px;
+  background:rgba(255,255,255,0.95);
+  border-radius:30px;
+  overflow:hidden;
+  text-align:center;
+  border:5px solid gold;
+  box-shadow:0 10px 40px rgba(0,0,0,0.25);
+  z-index:5;
+  position:relative;
+  animation:showCard 1.5s ease;
+}
 
-    .card img {
-      width: 100%;
-      display: block;
-    }
+@keyframes showCard{
+  from{
+    transform:scale(.5) rotate(-8deg);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
 
-    .content {
-      padding: 25px;
-    }
+.card img{
+  width:100%;
+}
 
-    h1 {
-      color: #b8860b;
-      margin-bottom: 15px;
-      font-size: 38px;
-    }
+.content{
+  padding:25px;
+}
 
-    p {
-      font-size: 22px;
-      color: #444;
-      margin: 12px 0;
-    }
+h1{
+  color:#b8860b;
+  font-size:40px;
+}
 
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 14px 35px;
-      background: linear-gradient(to right, #d4af37, #b8860b);
-      color: white;
-      text-decoration: none;
-      border-radius: 50px;
-      font-size: 22px;
-      transition: 0.3s;
-    }
+p{
+  font-size:22px;
+  color:#444;
+}
 
-    .btn:hover {
-      transform: scale(1.08);
-    }
+.btn{
+  display:inline-block;
+  padding:14px 35px;
+  background:linear-gradient(to right,#ff66c4,#b8860b);
+  color:white;
+  border-radius:50px;
+  text-decoration:none;
+  font-size:22px;
+  margin-top:20px;
+}
 
-    @keyframes zoomIn {
-      from {
-        transform: scale(0.7);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+.fall{
+  position:absolute;
+  top:-50px;
+  animation:fall linear infinite;
+  z-index:1;
+}
 
-    .fall {
-      position: absolute;
-      top: -50px;
-      font-size: 30px;
-      animation: fall linear infinite;
-      z-index: 1;
-      opacity: 0.8;
-    }
+@keyframes fall{
+  to{
+    transform:translateY(120vh) rotate(360deg);
+    opacity:0;
+  }
+}
 
-    @keyframes fall {
-      0% {
-        transform: translateY(-50px) rotate(0deg);
-        opacity: 1;
-      }
+.confetti{
+  position:absolute;
+  width:12px;
+  height:12px;
+  animation:confettiFall linear forwards;
+}
 
-      100% {
-        transform: translateY(120vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-  </style></head>
-<body>  <div class="card">
-    <img src="invite.jpg" alt="دعوة زفاف"><div class="content">
-  <h1>دعوة زفاف</h1>
-  <p>يسرنا دعوتكم لحضور حفل الزفاف</p>
-  <p>📅 7 حزيران 2026</p>
-  <p>🕖 الساعة 7 مساءً</p>
-  <p>📍 صالة اشنا - مقابل شارع عثمان</p>
+@keyframes confettiFall{
+  0%{
+    transform:translateY(-100px) rotate(0);
+    opacity:1;
+  }
+  100%{
+    transform:translateY(120vh) rotate(720deg);
+    opacity:0;
+  }
+}
 
-  <a class="btn" href="https://maps.google.com" target="_blank">
-    عرض الموقع
-  </a>
+.firework{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+  from{
+    transform:scale(1);
+    opacity:1;
+  }
+  to{
+    transform:scale(18);
+    opacity:0;
+  }
+}
+</style>
+
+<div class="card">
+  <img src="invite.jpg">
+
+  <div class="content">
+    <h1>دعوة زفاف</h1>
+
+    <p>يسرنا دعوتكم لحضور حفل الزفاف</p>
+
+    <p>📅 7 حزيران 2026</p>
+
+    <p>🕖 الساعة 7 مساءً</p>
+
+    <p>📍 صالة اشنا - مقابل شارع عثمان</p>
+
+    <a class="btn" href="https://maps.google.com">
+      عرض الموقع
+    </a>
+  </div>
 </div>
 
-  </div>  <script>
-    const symbols = ['🌹', '❤️', '💖', '🌸'];
+<script>
+const flowers=['🌹','💖','❤️','🌸'];
 
-    function createFall() {
-      const item = document.createElement('div');
-      item.classList.add('fall');
-      item.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+function createFall(){
+  const item=document.createElement('div');
+  item.className='fall';
 
-      item.style.left = Math.random() * window.innerWidth + 'px';
-      item.style.animationDuration = (Math.random() * 5 + 5) + 's';
-      item.style.fontSize = (Math.random() * 20 + 20) + 'px';
+  item.innerHTML=
+    flowers[Math.floor(Math.random()*flowers.length)];
 
-      document.body.appendChild(item);
+  item.style.left=Math.random()*window.innerWidth+'px';
 
-      setTimeout(() => {
-        item.remove();
-      }, 10000);
-    }
+  item.style.fontSize=
+    (20+Math.random()*25)+'px';
 
-    setInterval(createFall, 300);
-  </script></body>
-</html>
+  item.style.animationDuration=
+    (5+Math.random()*5)+'s';
+
+  document.body.appendChild(item);
+
+  setTimeout(()=>{
+    item.remove();
+  },10000);
+}
+
+setInterval(createFall,250);
+
+function createConfetti(){
+  for(let i=0;i<120;i++){
+
+    const conf=document.createElement('div');
+    conf.className='confetti';
+
+    conf.style.left=Math.random()*window.innerWidth+'px';
+
+    conf.style.top='-20px';
+
+    conf.style.background=
+      ['#ff66c4','#ffd700','#ffffff','#c77dff']
+      [Math.floor(Math.random()*4)];
+
+    conf.style.animationDuration=
+      (3+Math.random()*4)+'s';
+
+    document.body.appendChild(conf);
+
+    setTimeout(()=>{
+      conf.remove();
+    },7000);
+  }
+}
+
+createConfetti();
+
+function firework(){
+  for(let i=0;i<25;i++){
+
+    const fw=document.createElement('div');
+    fw.className='firework';
+
+    fw.style.left=
+      (Math.random()*window.innerWidth)+'px';
+
+    fw.style.top=
+      (Math.random()*window.innerHeight/2)+'px';
+
+    fw.style.background=
+      ['#ff00aa','#ffd700','#ffffff','#c77dff']
+      [Math.floor(Math.random()*4)];
+
+    document.body.appendChild(fw);
+
+    setTimeout(()=>{
+      fw.remove();
+    },1000);
+  }
+}
+
+setInterval(firework,1500);
+</script>
