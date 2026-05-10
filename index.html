@@ -14,8 +14,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: radial-gradient(circle, #2c3e50, #000); /* خلفية داكنة لإبراز الانفجارات */
-        perspective: 1000px; /* لزوم تأثير الـ 3D */
+        /* تغيير الخلفية للبنفسجي الكاشف المتدرج */
+        background: linear-gradient(135deg, #f3e5f5, #e1bee7, #ce93d8);
+        perspective: 1000px;
     }
 
     .start-screen {
@@ -24,7 +25,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: rgba(0,0,0,0.8);
+        background: rgba(74, 20, 140, 0.4); /* بنفسجي داكن شفاف */
+        backdrop-filter: blur(8px);
         z-index: 1000;
         transition: 0.5s;
     }
@@ -36,13 +38,13 @@
         border-radius: 50px;
         cursor: pointer;
         color: white;
-        background: linear-gradient(45deg, #d4af37, #f9f295, #d4af37);
-        box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        background: linear-gradient(45deg, #9c27b0, #ba68c8);
+        box-shadow: 0 10px 20px rgba(156, 39, 176, 0.3);
         font-weight: bold;
         transition: 0.3s;
     }
 
-    .start-btn:hover { transform: scale(1.1); }
+    .start-btn:hover { transform: scale(1.1); background: #7b1fa2; }
 
     /* حاوية الـ 3D */
     .card-container {
@@ -51,16 +53,16 @@
         transition: transform 0.1s ease-out;
         transform-style: preserve-3d;
         z-index: 10;
-        display: none; /* تظهر بعد الضغط */
+        display: none;
     }
 
     .card {
         background: white;
-        border-radius: 20px;
+        border-radius: 25px;
         overflow: hidden;
-        border: 8px solid #d4af37;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        transform: translateZ(50px); /* رفع البطاقة عن المستوى */
+        border: 6px solid #fff;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.15), 0 10px 20px rgba(156, 39, 176, 0.2);
+        transform: translateZ(50px);
         position: relative;
     }
 
@@ -70,16 +72,15 @@
         backface-visibility: hidden;
     }
 
-    /* طبقة لمعان فوق الصورة */
+    /* تأثير اللمعان */
     .card::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+        background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
         pointer-events: none;
     }
 
-    /* تأثير الانفجارات */
     canvas {
         position: absolute;
         top: 0;
@@ -87,14 +88,14 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
-        z-index: 1;
+        z-index: 5;
     }
 </style>
 </head>
 <body>
 
 <div class="start-screen" id="startScreen">
-    <button class="start-btn" onclick="startApp()">✨ فتح الدعوة الملكية ✨</button>
+    <button class="start-btn" onclick="startApp()">🎉 فتح الدعوة الملكية</button>
 </div>
 
 <canvas id="canvas"></canvas>
@@ -113,7 +114,6 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const container = document.getElementById('container');
-const card = document.getElementById('card');
 let particles = [];
 
 function resize() {
@@ -128,12 +128,12 @@ class Particle {
         this.x = x;
         this.y = y;
         this.color = color;
-        this.size = Math.random() * 8 + 4;
-        this.speedX = Math.random() * 10 - 5;
-        this.speedY = Math.random() * 10 - 15;
-        this.gravity = 0.2;
+        this.size = Math.random() * 7 + 3;
+        this.speedX = Math.random() * 12 - 6;
+        this.speedY = Math.random() * -15 - 5;
+        this.gravity = 0.25;
         this.rotation = Math.random() * 360;
-        this.rotationSpeed = Math.random() * 10 - 5;
+        this.rotationSpeed = Math.random() * 15 - 7.5;
         this.opacity = 1;
     }
     update() {
@@ -141,7 +141,7 @@ class Particle {
         this.x += this.speedX;
         this.y += this.speedY;
         this.rotation += this.rotationSpeed;
-        this.opacity -= 0.01;
+        this.opacity -= 0.008;
     }
     draw() {
         ctx.save();
@@ -149,17 +149,18 @@ class Particle {
         ctx.rotate(this.rotation * Math.PI / 180);
         ctx.globalAlpha = this.opacity;
         ctx.fillStyle = this.color;
-        // رسم قصاصات مستطيلة
-        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+        // رسم قصاصات زينة
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size * 1.5);
         ctx.restore();
     }
 }
 
 function createExplosion() {
-    const colors = ['#ff66c4', '#ffd700', '#ffffff', '#e0c3fc', '#00f2ff'];
+    // ألوان تتماشى مع الثيم البنفسجي والذهبي
+    const colors = ['#8e24aa', '#d81b60', '#ffd700', '#ffffff', '#e1bee7'];
     const x = Math.random() * canvas.width;
-    const y = canvas.height + 50;
-    for (let i = 0; i < 50; i++) {
+    const y = canvas.height + 20;
+    for (let i = 0; i < 40; i++) {
         particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
     }
 }
@@ -172,32 +173,34 @@ function animate() {
         if (p.opacity <= 0) particles.splice(i, 1);
     });
     
-    if (Math.random() < 0.1) createExplosion();
+    if (Math.random() < 0.12) createExplosion();
     requestAnimationFrame(animate);
 }
 
 function startApp() {
-    document.getElementById('startScreen').style.display = 'none';
-    container.style.display = 'block';
-    document.getElementById('music').play();
-    animate();
+    document.getElementById('startScreen').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('startScreen').style.display = 'none';
+        container.style.display = 'block';
+        document.getElementById('music').play();
+        animate();
+    }, 500);
 }
 
-// تأثير تحريك البطاقة 3D مع الماوس
+// تفاعل الـ 3D مع الماوس
 document.addEventListener('mousemove', (e) => {
-    let xAxis = (window.innerWidth / 2 - e.pageX) / 20;
-    let yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+    let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+    let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
     container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
 });
 
-// دعم الجوال
+// تفاعل الـ 3D مع اللمس للموبايل
 document.addEventListener('touchmove', (e) => {
     let touch = e.touches[0];
-    let xAxis = (window.innerWidth / 2 - touch.pageX) / 20;
-    let yAxis = (window.innerHeight / 2 - touch.pageY) / 20;
+    let xAxis = (window.innerWidth / 2 - touch.pageX) / 25;
+    let yAxis = (window.innerHeight / 2 - touch.pageY) / 25;
     container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
 });
-
 </script>
 </body>
 </html>
