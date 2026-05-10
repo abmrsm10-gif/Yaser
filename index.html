@@ -14,9 +14,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        /* تغيير الخلفية للبنفسجي الكاشف المتدرج */
         background: linear-gradient(135deg, #f3e5f5, #e1bee7, #ce93d8);
-        perspective: 1000px;
+        perspective: 1500px; /* زيادة العمق للتأثير الثلاثي */
     }
 
     .start-screen {
@@ -25,10 +24,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: rgba(74, 20, 140, 0.4); /* بنفسجي داكن شفاف */
+        background: rgba(74, 20, 140, 0.4);
         backdrop-filter: blur(8px);
         z-index: 1000;
-        transition: 0.5s;
+        transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .start-btn {
@@ -46,39 +45,60 @@
 
     .start-btn:hover { transform: scale(1.1); background: #7b1fa2; }
 
-    /* حاوية الـ 3D */
+    /* حاوية الـ 3D المعدلة */
     .card-container {
-        width: 90%;
-        max-width: 400px;
+        width: 80%; /* تصغير العرض بنسبة بسيطة لجمالية أفضل */
+        max-width: 340px; /* حجم مثالي للموبايل والكمبيوتر */
         transition: transform 0.1s ease-out;
         transform-style: preserve-3d;
         z-index: 10;
         display: none;
+        opacity: 0;
+    }
+
+    /* كلاس التفعيل للأنيميشن */
+    .card-container.reveal {
+        display: block;
+        animation: royalPopup 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
     .card {
         background: white;
-        border-radius: 25px;
+        border-radius: 20px;
         overflow: hidden;
-        border: 6px solid #fff;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.15), 0 10px 20px rgba(156, 39, 176, 0.2);
+        border: 5px solid #fff;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.2), 0 10px 20px rgba(156, 39, 176, 0.2);
         transform: translateZ(50px);
         position: relative;
     }
 
     .card img {
         width: 100%;
+        max-height: 75vh; /* تصغير الطول لضمان عدم اختفاء الكلمات */
+        object-fit: contain; /* يحافظ على الكلمات داخل الصورة دون قص */
         display: block;
         backface-visibility: hidden;
     }
 
-    /* تأثير اللمعان */
+    /* تأثير اللمعان المتحرك */
     .card::after {
         content: '';
         position: absolute;
         inset: 0;
         background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
         pointer-events: none;
+        animation: shine 3s infinite;
+    }
+
+    /* أنيميشن الانبثاق الملكي */
+    @keyframes royalPopup {
+        0% { transform: scale(0.2) rotateX(-100deg) translateY(200px); opacity: 0; }
+        100% { transform: scale(1) rotateX(0deg) translateY(0); opacity: 1; }
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
     }
 
     canvas {
@@ -149,14 +169,12 @@ class Particle {
         ctx.rotate(this.rotation * Math.PI / 180);
         ctx.globalAlpha = this.opacity;
         ctx.fillStyle = this.color;
-        // رسم قصاصات زينة
         ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size * 1.5);
         ctx.restore();
     }
 }
 
 function createExplosion() {
-    // ألوان تتماشى مع الثيم البنفسجي والذهبي
     const colors = ['#8e24aa', '#d81b60', '#ffd700', '#ffffff', '#e1bee7'];
     const x = Math.random() * canvas.width;
     const y = canvas.height + 20;
@@ -178,27 +196,39 @@ function animate() {
 }
 
 function startApp() {
-    document.getElementById('startScreen').style.opacity = '0';
+    // إخفاء شاشة البداية
+    const screen = document.getElementById('startScreen');
+    screen.style.opacity = '0';
+    
     setTimeout(() => {
-        document.getElementById('startScreen').style.display = 'none';
+        screen.style.display = 'none';
+        
+        // تفعيل الدعوة مع الأنيميشن الجديد
         container.style.display = 'block';
-        document.getElementById('music').play();
+        setTimeout(() => {
+            container.classList.add('reveal');
+        }, 50);
+
+        // تشغيل الموسيقى والاحتفال
+        const music = document.getElementById('music');
+        music.play().catch(e => console.log("المتصفح حظر التشغيل التلقائي"));
         animate();
-    }, 500);
+    }, 800);
 }
 
-// تفاعل الـ 3D مع الماوس
+// تفاعل الـ 3D الذكي
 document.addEventListener('mousemove', (e) => {
-    let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-    let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-    container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    if(container.classList.contains('reveal')) {
+        let xAxis = (window.innerWidth / 2 - e.pageX) / 20;
+        let yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+        container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    }
 });
 
-// تفاعل الـ 3D مع اللمس للموبايل
 document.addEventListener('touchmove', (e) => {
     let touch = e.touches[0];
-    let xAxis = (window.innerWidth / 2 - touch.pageX) / 25;
-    let yAxis = (window.innerHeight / 2 - touch.pageY) / 25;
+    let xAxis = (window.innerWidth / 2 - touch.pageX) / 20;
+    let yAxis = (window.innerHeight / 2 - touch.pageY) / 20;
     container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
 });
 </script>
