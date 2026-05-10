@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>دعوة زفاف</title>
 
 <style>
@@ -29,13 +30,14 @@ animation:bgMove 12s ease infinite;
 
 /* زر البداية */
 .start-screen{
-position:fixed;
-inset:0;
+position:absolute;
+width:100%;
+height:100%;
 display:flex;
 justify-content:center;
 align-items:center;
-background:rgba(0,0,0,0.3);
-z-index:100;
+z-index:20;
+background:rgba(0,0,0,0.25);
 }
 
 .start-btn{
@@ -46,88 +48,80 @@ border-radius:50px;
 cursor:pointer;
 color:white;
 background:linear-gradient(45deg,#ff66c4,#ffd700);
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+transition:.3s;
 }
 
-/* الكتاب */
-.book{
-width:320px;
-height:420px;
-position:relative;
-perspective:1500px;
-}
+.start-btn:hover{transform:scale(1.1);}
 
-/* الغلاف */
-.cover{
-width:100%;
-height:100%;
-position:absolute;
-transform-origin:left;
-transition:1.2s ease;
-border-radius:15px;
+/* البطاقة */
+.card{
+width:90%;
+max-width:430px;
+background:rgba(255,255,255,0.95);
+border-radius:30px;
+text-align:center;
+border:5px solid gold;
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
 overflow:hidden;
-box-shadow:0 10px 40px rgba(0,0,0,0.4);
-backface-visibility:hidden;
-z-index:3;
+z-index:5;
+opacity:0;
+transform:translateY(60px) scale(.8);
+transition:1.2s ease;
 }
 
-.cover img{
+.card.show{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+
+.card img{
 width:100%;
-height:100%;
+max-height:300px;
 object-fit:cover;
 }
 
-/* فتح الكتاب */
-.book.open .cover{
-transform:rotateY(-160deg);
-}
+.content{padding:18px;}
 
-/* داخل الكتاب */
-.inside{
-position:absolute;
-width:100%;
-height:100%;
-background:#fff;
-border-radius:15px;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-padding:15px;
-opacity:0;
-transform:scale(.9);
-transition:1s;
-z-index:1;
-
-/* 🔥 إصلاح النص المقلوب */
-direction:rtl;
-unicode-bidi:plaintext;
-}
-
-.book.open .inside{
-opacity:1;
-transform:scale(1);
-}
-
-/* الصورة داخل الكتاب */
-.inside img{
-width:100%;
-max-height:240px;
-object-fit:contain;
-border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,0.2);
-margin-bottom:10px;
-}
-
-/* نص */
-.inside h1{
+h1{
 color:#b8860b;
-margin:10px 0;
+font-size:36px;
+margin-bottom:10px;
+animation:fadeText 2s ease forwards;
 }
 
-.inside p{
-font-size:18px;
+p{
+font-size:20px;
 color:#444;
-margin:5px 0;
+margin:10px 0;
+opacity:0;
+animation:slideText 1.5s ease forwards;
+}
+
+p:nth-child(2){animation-delay:.5s;}
+p:nth-child(3){animation-delay:1s;}
+p:nth-child(4){animation-delay:1.5s;}
+p:nth-child(5){animation-delay:2s;}
+
+@keyframes fadeText{
+from{opacity:0;transform:scale(.5);}
+to{opacity:1;transform:scale(1);}
+}
+
+@keyframes slideText{
+from{opacity:0;transform:translateX(50px);}
+to{opacity:1;transform:translateX(0);}
+}
+
+.btn{
+display:inline-block;
+padding:12px 30px;
+background:linear-gradient(to right,#ff66c4,#b8860b);
+color:white;
+border-radius:50px;
+text-decoration:none;
+font-size:20px;
+margin-top:15px;
 }
 
 /* قصاصات */
@@ -136,6 +130,7 @@ position:absolute;
 width:8px;
 height:12px;
 animation:fall linear forwards;
+z-index:1;
 }
 
 @keyframes fall{
@@ -152,11 +147,12 @@ width:4px;
 height:4px;
 border-radius:50%;
 animation:boom 1s ease-out forwards;
+z-index:1;
 }
 
 @keyframes boom{
-from{transform:scale(1);opacity:1;}
-to{transform:scale(25);opacity:0;}
+0%{transform:scale(1);}
+100%{transform:scale(30);opacity:0;}
 }
 
 </style>
@@ -164,7 +160,7 @@ to{transform:scale(25);opacity:0;}
 
 <body>
 
-<!-- زر البداية -->
+<!-- شاشة البداية -->
 <div class="start-screen" id="startScreen">
 <button class="start-btn" onclick="start()">🎉 فتح الدعوة</button>
 </div>
@@ -174,30 +170,29 @@ to{transform:scale(25);opacity:0;}
 <source src="wedding.mp3" type="audio/mpeg">
 </audio>
 
-<!-- الكتاب -->
-<div class="book" id="book">
+<div class="card" id="card">
 
-<div class="cover">
-<img src="invite.png">
-</div>
+<img src="invite.jpg">
 
-<div class="inside">
-
-<img src="invite.png">
+<div class="content">
 
 <h1>دعوة زفاف</h1>
-<p>يسرنا حضوركم لحفل الزفاف</p>
+
+<p>يسرنا دعوتكم لحضور حفل الزفاف</p>
 <p>📅 7 حزيران 2026</p>
 <p>🕖 الساعة 7 مساءً</p>
+<p>📍 صالة اثينا - مقابل شارع عثمان</p>
+
+<a class="btn" href="https://maps.google.com" target="_blank">عرض الموقع</a>
 
 </div>
-
 </div>
 
 <script>
 
 let started=false;
 
+/* تشغيل كل شيء بعد الضغط */
 function start(){
 
 if(started) return;
@@ -205,27 +200,28 @@ started=true;
 
 document.getElementById("startScreen").style.display="none";
 
-/* فتح الكتاب */
-document.getElementById("book").classList.add("open");
+document.getElementById("card").classList.add("show");
 
 /* تشغيل الموسيقى */
-const music=document.getElementById("music");
-music.play().catch(()=>{});
+document.getElementById("music").play();
 
-/* مؤثرات */
-setInterval(confetti,70);
-setInterval(firework,1200);
+/* تشغيل المؤثرات */
+setInterval(createConfetti,60);
+setInterval(firework,900);
 
 }
 
-/* قصاصات */
-function confetti(){
+/* قصاصات ورقية */
+function createConfetti(){
 
 const c=document.createElement("div");
 c.className="confetti";
 
 c.style.left=Math.random()*window.innerWidth+"px";
-c.style.background=["#ff66c4","#ffd700","#fff","#00e5ff"][Math.floor(Math.random()*4)];
+c.style.background=[
+"#ff66c4","#ffd700","#ffffff","#00e5ff","#c77dff"
+][Math.floor(Math.random()*5)];
+
 c.style.animationDuration=(3+Math.random()*3)+"s";
 
 document.body.appendChild(c);
@@ -234,24 +230,26 @@ setTimeout(()=>c.remove(),6000);
 
 }
 
-/* انفجارات */
+/* انفجار ألعاب نارية دائرية */
 function firework(){
 
 const x=Math.random()*window.innerWidth;
 const y=Math.random()*window.innerHeight*0.6;
 
-for(let i=0;i<30;i++){
+for(let i=0;i<40;i++){
 
 const f=document.createElement("div");
 f.className="firework";
 
 const angle=Math.random()*2*Math.PI;
-const radius=Math.random()*100;
+const radius=Math.random()*120;
 
-f.style.left=(x+Math.cos(angle)*radius)+"px";
-f.style.top=(y+Math.sin(angle)*radius)+"px";
+f.style.left=(x + Math.cos(angle)*radius)+"px";
+f.style.top=(y + Math.sin(angle)*radius)+"px";
 
-f.style.background=["#ff0000","#ffd700","#fff","#00ffff"][Math.floor(Math.random()*4)];
+f.style.background=[
+"#ff0000","#ffd700","#ffffff","#00ffff","#ff66c4"
+][Math.floor(Math.random()*5)];
 
 document.body.appendChild(f);
 
