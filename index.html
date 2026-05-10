@@ -44,6 +44,7 @@ border-radius:50px;
 cursor:pointer;  
 color:white;  
 background:linear-gradient(45deg,#ff66c4,#ffd700);  
+box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }  
   
 .card{  
@@ -60,17 +61,43 @@ transform:scale(.8);
 transition:1s;  
 position:relative;  
 z-index:10;  
+padding:40px 25px;
+background: linear-gradient(to bottom, #fff 0%, #fff9e8 100%);
 }  
   
 .card.show{  
 opacity:1;  
 transform:scale(1);  
 }  
-  
-.card img{  
-width:100%;  
-display:block;  
-}  
+
+/* تصميم محتوى الدعوة بدلاً من الصورة */
+.invite-content h1 {
+color: #d63384;
+font-size: 28px;
+margin-bottom: 20px;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.invite-content p {
+color: #555;
+font-size: 18px;
+line-height: 1.8;
+margin-bottom: 12px;
+}
+
+.invite-content .names {
+font-size: 22px;
+font-weight: bold;
+color: #b8860b;
+margin: 20px 0;
+}
+
+.invite-content .date {
+font-size: 20px;
+color: #2c3e50;
+font-weight: bold;
+margin-top: 15px;
+}
   
 /* قصاصات الأعراس */  
 .confetti{  
@@ -137,6 +164,11 @@ transform:translateY(-120px) rotate(var(--angle)) scale(0);
 opacity:0;  
 }  
 }  
+
+@keyframes burstFly {
+0% { transform: translate(0,0) rotate(0deg); }
+100% { transform: translate(var(--tx), var(--ty)) rotate(360deg); }
+}
   
 </style>  
 </head>  
@@ -147,11 +179,20 @@ opacity:0;
 </div>  
 
 <audio id="music" loop>  
-<source src="wedding.mp3" type="audio/mpeg">  
-  
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">  
+
 
 <div class="card" id="card">  
-<img src="invite.png">  
+<!-- محتوى الدعوة بدلاً من الصورة -->
+<div class="invite-content">
+<h1>دعوة زفاف سعيدة</h1>
+<p>يسرنا دعوتكم لحضور حفل زفافنا المبارك، ومشاركتكم لنا أجمل لحظات حياتنا</p>
+<div class="names">أحمد & سارة</div>
+<p>يوم السبت الموافق</p>
+<div class="date">15 يونيو 2026 - الساعة 7 مساءً</div>
+<p>في قاعة الأفراح - فندق القصر</p>
+<p>ننتظركم لتكتمل فرحتنا بوجودكم</p>
+</div>
 </div>  
 
 <script>  
@@ -163,28 +204,21 @@ function start(){
 if(started) return;  
 started = true;  
 
-// إخفاء شاشة البداية
 document.getElementById('startScreen').style.display = 'none';  
-
-// إظهار البطاقة
 document.getElementById('card').classList.add('show');  
 
 // تشغيل الموسيقى
 document.getElementById('music').play().catch(()=>{});  
 
-// تشغيل تأثيرات الانفجارات والقصاصات
 startFireworksAndConfetti();  
 }  
 
-// دالة إنشاء الانفجارات والقصاصات
 function startFireworksAndConfetti(){
-// تكرار الانفجارات كل فترة
 setInterval(() => {
 createFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.7);
 createConfettiBurst(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.7, 80);
 }, 1500);
 
-// قصاصات مستمرة تتساقط من الأعلى
 setInterval(() => {
 for(let i=0; i<15; i++){
 createConfetti(Math.random() * window.innerWidth, -20);
@@ -192,7 +226,6 @@ createConfetti(Math.random() * window.innerWidth, -20);
 }, 300);
 }
 
-// إنشاء تأثير انفجار (قنبلة)
 function createFirework(x, y){
 const firework = document.createElement('div');
 firework.classList.add('firework');
@@ -201,7 +234,6 @@ firework.style.top = y + 'px';
 firework.style.background = colors[Math.floor(Math.random() * colors.length)];
 document.body.appendChild(firework);
 
-// إنشاء شرارات متجهة للخارج
 for(let i=0; i<16; i++){
 const spark = document.createElement('div');
 spark.classList.add('spark');
@@ -210,16 +242,12 @@ spark.style.top = y + 'px';
 spark.style.background = colors[Math.floor(Math.random() * colors.length)];
 spark.style.setProperty('--angle', (i * 22.5) + 'deg');
 document.body.appendChild(spark);
-
-// حذف الشرارة بعد انتهاء الحركة
 setTimeout(() => spark.remove(), 1000);
 }
 
-// حذف الانفجار بعد انتهاء الحركة
 setTimeout(() => firework.remove(), 1200);
 }
 
-// إنشاء قصاصة ورقية واحدة
 function createConfetti(x, y){
 const confetti = document.createElement('div');
 confetti.classList.add('confetti');
@@ -231,11 +259,9 @@ confetti.style.width = `${Math.random() * 8 + 6}px`;
 confetti.style.height = `${Math.random() * 10 + 8}px`;
 confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
 document.body.appendChild(confetti);
-
 setTimeout(() => confetti.remove(), 5000);
 }
 
-// انفجار قصاصات في نقطة محددة
 function createConfettiBurst(x, y, count){
 for(let i=0; i<count; i++){
 const confetti = document.createElement('div');
@@ -253,20 +279,9 @@ confetti.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
 confetti.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
 confetti.style.animation = 'burstFly 1.5s ease-out forwards, fall 4s linear forwards';
 document.body.appendChild(confetti);
-
 setTimeout(() => confetti.remove(), 4000);
 }
 }
-
-// إضافة حركة انفجار للقصاصات
-const style = document.createElement('style');
-style.textContent = `
-@keyframes burstFly {
-0% { transform: translate(0,0) rotate(0deg); }
-100% { transform: translate(var(--tx), var(--ty)) rotate(360deg); }
-}
-`;
-document.head.appendChild(style);
 
 </script>  
 
