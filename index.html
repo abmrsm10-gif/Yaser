@@ -44,7 +44,6 @@
         white-space: nowrap;
     }
 
-    /* حاوية الأزرار السفلية */
     .action-buttons {
         position: fixed;
         bottom: 30px;
@@ -87,7 +86,6 @@
     .btn-confirm { background: linear-gradient(45deg, #d4af37, #b8860b); width: 35%; border-color: #fff; font-size: 16px; }
     .btn-open { background: linear-gradient(45deg, #4a148c, #6a1b9a); width: 30%; }
 
-    /* حاوية الـ VIP - الانبثاق من بعيد */
     .card-container {
         width: 85%;
         max-width: 330px;
@@ -115,7 +113,7 @@
 
     .card img {
         width: 100%;
-        max-height: 65vh; /* تقليل الطول قليلاً لترك مساحة للأزرار */
+        max-height: 65vh;
         object-fit: contain;
         display: block;
         backface-visibility: hidden;
@@ -163,7 +161,7 @@
     </div>
 </div>
 
-<audio id="music" loop>
+<audio id="music" loop preload="auto">
     <source src="wedding.mp3" type="audio/mpeg">
 </audio>
 
@@ -172,6 +170,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const container = document.getElementById('container');
 const actionBtns = document.getElementById('actionBtns');
+const music = document.getElementById('music');
 let particles = [];
 
 function resize() {
@@ -224,18 +223,19 @@ function animate() {
 }
 
 function startApp() {
+    // تشغيل الموسيقى فور الضغط لتجاوز قيود المتصفح
+    music.play().catch(e => console.log("Audio play failed:", e));
+
     document.getElementById('startScreen').style.opacity = '0';
     setTimeout(() => {
         document.getElementById('startScreen').style.display = 'none';
         container.style.display = 'block';
         setTimeout(() => {
             container.classList.add('reveal');
-            // إظهار الأزرار بعد بدء ظهور البطاقة
             setTimeout(() => {
                 actionBtns.classList.add('show');
             }, 1000);
         }, 100);
-        document.getElementById('music').play().catch(() => {});
         animate();
     }, 1000);
 }
