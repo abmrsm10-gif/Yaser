@@ -3,90 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>دعوة زفاف ثلاثية الأبعاد</title>
+<title>دعوة زفاف - احتفال 3D خفيف</title>
 <style>
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    user-select: none;
   }
 
   body {
     overflow: hidden;
-    font-family: 'Tahoma', 'Segoe UI', system-ui, -apple-system, 'Amiri', serif;
+    font-family: 'Tahoma', 'Segoe UI', 'Amiri', serif;
     height: 100vh;
-    width: 100%;
-    background: radial-gradient(circle at center, #1a0a2a, #0d0221);
+    background: radial-gradient(circle at 30% 20%, #1e0b36, #0a0319);
     position: relative;
+    cursor: pointer;
   }
 
-  /* Canvas 3D الخلفية */
-  #bg-canvas {
+  /* طبقة الخلفية ثلاثية الأبعاد (خفيفة) */
+  .bg-3d {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
+    inset: 0;
     z-index: 0;
     pointer-events: none;
   }
 
-  /* شاشة البداية مع تأثير ضبابي */
+  /* شاشة البداية */
   .start-screen {
     position: fixed;
     inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
     z-index: 200;
-    transition: opacity 1s ease;
+    transition: opacity 0.8s ease;
   }
 
   .start-btn {
-    padding: 18px 44px;
-    font-size: 26px;
+    padding: 16px 42px;
+    font-size: 24px;
     font-weight: bold;
     border: none;
     border-radius: 60px;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3, #ffb88c);
+    color: white;
     cursor: pointer;
-    color: #fff3e0;
-    background: linear-gradient(135deg, #ff4d6d, #ffb347, #ffd966);
-    box-shadow: 0 0 20px rgba(255, 100, 100, 0.8), 0 8px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 25px rgba(255, 80, 120, 0.5);
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: inherit;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
   }
 
   .start-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 35px rgba(255, 200, 100, 0.9);
+    box-shadow: 0 12px 30px rgba(255, 120, 150, 0.8);
   }
 
-  /* بطاقة الدعوة بتأثير زجاجي وثلاثي الأبعاد */
+  /* بطاقة الدعوة */
   .card {
     position: relative;
     z-index: 20;
     width: 90%;
-    max-width: 500px;
-    background: rgba(255, 255, 255, 0.97);
-    border-radius: 48px;
+    max-width: 480px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 45px;
     overflow: hidden;
     text-align: center;
-    border: 3px solid rgba(255, 215, 0, 0.8);
-    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4), 0 0 0 8px rgba(255, 200, 100, 0.3);
+    border: 3px solid #ffd966;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 6px rgba(255, 200, 100, 0.2);
     opacity: 0;
-    transform: scale(0.7) rotateY(-15deg);
-    transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+    transform: scale(0.8) translateY(40px);
+    transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.2), transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.3);
     backdrop-filter: blur(2px);
   }
 
   .card.show {
     opacity: 1;
-    transform: scale(1) rotateY(0deg);
+    transform: scale(1) translateY(0);
   }
 
   .card img {
@@ -95,372 +91,338 @@
     pointer-events: none;
   }
 
-  /* تصميم متجاوب */
+  /* صانع القصاصات المتحركة الخفيفة */
+  .confetti-piece {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 20px;
+    will-change: transform;
+    animation: floatFall linear forwards;
+  }
+
+  @keyframes floatFall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* وميض انفجار خفيف */
+  .flash-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,100,150,0));
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9998;
+    animation: flashPop 0.5s ease-out forwards;
+  }
+
+  @keyframes flashPop {
+    0% {
+      width: 0px;
+      height: 0px;
+      opacity: 0.9;
+    }
+    100% {
+      width: 180px;
+      height: 180px;
+      opacity: 0;
+    }
+  }
+
   @media (max-width: 550px) {
     .card { max-width: 92%; }
-    .start-btn { font-size: 22px; padding: 14px 36px; }
-  }
-
-  /* رسوم متحركة للقصاصات والورود والقلوب (fallbacks) لكن معظم التأثيرات ثلاثية الأبعاد عبر canvas */
-  .hide {
-    display: none;
-  }
-
-  /* تأثيرات جانبية للأزرار */
-  button {
-    font-family: inherit;
+    .start-btn { font-size: 20px; padding: 12px 32px; }
   }
 </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
+<div class="bg-3d" id="bg3d"></div>
 
 <div class="start-screen" id="startScreen">
-  <button class="start-btn" onclick="startWedding()">✨ افتح الدعوة ✨</button>
+  <button class="start-btn" onclick="startWedding()">🎉 افتح الدعوة 🎉</button>
 </div>
 
 <div class="card" id="card">
-  <img src="invite.png" alt="دعوة زفاف" onerror="this.src='https://placehold.co/600x800/fff8e7/d4af37?text=دعوة+زفاف+سعيدة';">
+  <img src="invite.png" alt="دعوة زفاف" onerror="this.src='https://placehold.co/600x800/fffaf0/d4af37?text=دعوة+زفاف+سعيدة';">
 </div>
 
-<audio id="weddingAudio" loop preload="auto">
+<audio id="bgMusic" loop preload="auto">
   <source src="wedding.mp3" type="audio/mpeg">
-  <!-- ملف تجريبي إذا لم يوجد الصوت -->
 </audio>
 
 <script>
   (function() {
-    // ------------------- 3D مشهد انفجارات مع قصاصات وردية وقلوب -------------------
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    
-    let width, height;
-    let particles = [];
-    let explosions = [];     // لكل انفجار جزيئات خاصة به
-    let animationId = null;
-    let sceneActive = false; // تصبح true بعد الضغط على زر البدء
-    
-    // ألوان زاهية تشبه القصاصات والورود والقلوب
-    const colorPalette = [
-      '#FFB7B2', '#FFD966', '#FF6B6B', '#E84393', '#F9C74F', '#90BE6D', '#F94144',
-      '#F9844A', '#F8961E', '#577590', '#9C89B8', '#FFC8DD', '#B8F2E6', '#FF99C8',
-      '#FCF6BD', '#D0F4DE', '#A9DEF9'
-    ];
-    
-    // قلوب ورموز ورد (لتظهر كأيقونات صغيرة)
-    const heartSymbol = '❤️';
-    const roseSymbol = '🌹';
-    const flowerSymbol = '🌸';
-    const confettiSymbols = ['⭐', '✨', '💖', '💗', '🌺', '🌼', '🌸', '❤️', '💐'];
-    
-    class Particle3D {
-      constructor(x, y, vx, vy, type = 'confetti') {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
-        this.size = Math.random() * 9 + 5;   // 5~14px
-        this.alpha = 1;
-        this.life = 1;
-        this.decay = 0.018 + Math.random() * 0.02;
-        this.type = type;  // 'confetti', 'heart', 'flower'
-        this.rotation = Math.random() * Math.PI * 2;
-        this.rotSpeed = (Math.random() - 0.5) * 0.2;
-        // اختيار شكل أو لون مميز
-        if (type === 'heart') {
-          this.symbol = heartSymbol;
-          this.color = '#ff4d6d';
-        } else if (type === 'flower') {
-          this.symbol = [roseSymbol, flowerSymbol, '🌻', '🌷'][Math.floor(Math.random() * 4)];
-          this.color = '#ffb347';
-        } else {
-          // قصاصة عادية
-          this.symbol = null;
-          this.color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-        }
-        this.gravity = 0.15;
-        this.drag = 0.99;
-      }
-      
-      update() {
-        this.vx *= this.drag;
-        this.vy += this.gravity;
-        this.vx += (Math.random() - 0.5) * 0.2; // رياح خفيفة
-        this.x += this.vx;
-        this.y += this.vy;
-        this.life -= this.decay;
-        this.alpha = this.life;
-        this.rotation += this.rotSpeed;
-        return this.life > 0.02 && this.y < height + 200 && this.x > -200 && this.x < width + 200;
-      }
-      
-      draw(ctx) {
-        ctx.save();
-        ctx.globalAlpha = this.alpha * 0.9;
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-        if (this.type === 'heart') {
-          ctx.font = `${this.size}px "Segoe UI Emoji", "Apple Color Emoji", system-ui, sans-serif`;
-          ctx.fillStyle = this.color;
-          ctx.shadowBlur = 6;
-          ctx.shadowColor = "rgba(255,80,120,0.8)";
-          ctx.fillText(heartSymbol, -this.size/2, this.size/2);
-        } else if (this.type === 'flower') {
-          ctx.font = `${this.size+2}px "Segoe UI Emoji", "Apple Color Emoji"`;
-          ctx.fillStyle = '#ffa07a';
-          ctx.shadowBlur = 5;
-          ctx.fillText(this.symbol, -this.size/2, this.size/2);
-        } else {
-          // قصاصات ورقية: مستطيلات دوارة
-          ctx.fillStyle = this.color;
-          ctx.shadowBlur = 3;
-          ctx.shadowColor = "rgba(0,0,0,0.2)";
-          ctx.fillRect(-this.size/2, -this.size/3, this.size, this.size * 0.6);
-          // خط زخرفي
-          ctx.fillStyle = "rgba(255,215,0,0.7)";
-          ctx.fillRect(-this.size/2 + 2, -this.size/6, this.size-4, 2);
-        }
-        ctx.restore();
-      }
-    }
-    
-    // انفجار ثلاثي الأبعاد: يولد دفعة كبيرة من الجسيمات (ورود، قلوب، قصاصات)
-    function createExplosion(centerX, centerY, intensity = 1.2) {
-      const particleCount = Math.floor(45 * intensity + 15); // 45~70 جسيم
-      for (let i = 0; i < particleCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 3 + Math.random() * 9 * intensity;
-        const vx = Math.cos(angle) * speed * (Math.random() * 1.2);
-        const vy = Math.sin(angle) * speed * (Math.random() * 1.2);
-        
-        let type = 'confetti';
-        const randType = Math.random();
-        if (randType < 0.3) type = 'heart';      // 30% قلوب
-        else if (randType < 0.55) type = 'flower'; // 25% ورد وزهـور
-        else type = 'confetti';                   // 45% قصاصات ورقية
-        
-        const p = new Particle3D(centerX, centerY, vx, vy, type);
-        // جعل الجاذبية أخف للورود لتبدو ساحرة
-        if (type === 'flower') p.gravity = 0.08;
-        if (type === 'heart') p.gravity = 0.12;
-        particles.push(p);
-      }
-    }
-    
-    // انفجار عشوائي في الخلفية (مشهد 3d)
-    function randomBackgroundExplosion() {
-      if (!sceneActive) return;
-      const randX = Math.random() * width;
-      const randY = Math.random() * height * 0.7 + height * 0.15;
-      const intens = 0.7 + Math.random() * 1.0;
-      createExplosion(randX, randY, intens);
-    }
-    
-    // انفجارات متتالية ومستمرة لإحساس مهرجان 3d
+    // ------------------- نظام قصاصات عنيف لكن خفيف (optimized) -------------------
+    let activeParticles = [];
+    let musicStarted = false;
+    let sceneActive = false;
     let explosionInterval = null;
-    let continuousExplosion = null;
+    let bgInterval = null;
+
+    // عناصر رقمية: قلوب، ورود، قصاصات ملونة
+    const iconsList = ['❤️', '💖', '🌸', '🌹', '🌼', '⭐', '✨', '💗', '🌺', '💐', '🎉', '❤️‍🔥'];
+    const colorsList = ['#ff4d6d', '#ffb347', '#f4d03f', '#e84393', '#9b59b6', '#2ecc71', '#ff6b6b', '#ff9f4a'];
     
-    function startBackgroundFireworks() {
-      if (explosionInterval) clearInterval(explosionInterval);
-      // إنفجار كل 1.2 ثانية إلى 2.2 ثانية بشكل ديناميكي
-      explosionInterval = setInterval(() => {
-        if (sceneActive) {
-          // انفجارات متعددة في مواقع مختلفة أحياناً
-          const countExpl = Math.random() > 0.6 ? 2 : 1;
-          for (let i=0; i<countExpl; i++) {
-            const randX = 50 + Math.random() * (width - 100);
-            const randY = 60 + Math.random() * (height - 100);
-            const strength = 0.8 + Math.random() * 1.2;
-            createExplosion(randX, randY, strength);
+    // انفجار واحد: يولد عدد قليل من الجسيمات (خفيف وسريع)
+    function createExplosion(x, y, intensity = 1.0) {
+      if (!sceneActive) return;
+      
+      // عدد الجسيمات بين 12 و 28 فقط - خفيف جداً
+      let count = Math.floor(12 + (intensity * 14));
+      count = Math.min(count, 32);
+      
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 9 * (intensity * 0.8);
+        const vx = Math.cos(angle) * speed * (Math.random() * 0.8 + 0.6);
+        const vy = Math.sin(angle) * speed * (Math.random() * 0.8 + 0.5);
+        
+        // تحديد نوع العنصر: قلب، وردة، قصاصة
+        let type = 'confetti';
+        const r = Math.random();
+        if (r < 0.35) type = 'heart';
+        else if (r < 0.6) type = 'flower';
+        else type = 'paper';
+        
+        let icon = '';
+        let color = '';
+        let isEmoji = true;
+        
+        if (type === 'heart') {
+          icon = ['❤️', '💖', '💗', '💓'][Math.floor(Math.random()*4)];
+          color = '#ff4d6d';
+        } else if (type === 'flower') {
+          icon = ['🌸', '🌹', '🌼', '🌺', '🌷'][Math.floor(Math.random()*5)];
+          color = '#ff8c69';
+        } else {
+          // قصاصة ورق مستطيل
+          isEmoji = false;
+          color = colorsList[Math.floor(Math.random() * colorsList.length)];
+        }
+        
+        const element = document.createElement('div');
+        element.classList.add('confetti-piece');
+        
+        if (isEmoji) {
+          element.textContent = icon;
+          element.style.fontSize = (12 + Math.random() * 15) + 'px';
+          element.style.fontFamily = '"Segoe UI Emoji", "Apple Color Emoji", sans-serif';
+          element.style.color = color;
+        } else {
+          // قصاصة ورقية مستطيلة
+          element.style.width = (8 + Math.random() * 12) + 'px';
+          element.style.height = (6 + Math.random() * 10) + 'px';
+          element.style.backgroundColor = color;
+          element.style.borderRadius = '2px';
+          element.style.boxShadow = '0 1px 2px rgba(0,0,0,0.2)';
+          element.textContent = '';
+        }
+        
+        element.style.left = x + 'px';
+        element.style.top = y + 'px';
+        element.style.position = 'fixed';
+        element.style.zIndex = '10000';
+        
+        // إضافة خصائص الحركة عبر CSS custom properties
+        const duration = 0.8 + Math.random() * 1.6;
+        const rotStart = Math.random() * 360;
+        const rotEnd = rotStart + (Math.random() * 720 - 360);
+        
+        element.style.animation = `floatFall ${duration}s linear forwards`;
+        element.style.transform = `rotate(${rotStart}deg)`;
+        
+        document.body.appendChild(element);
+        
+        // تخزين البيانات للتحكم لاحقاً (إزالة بعد انتهاء الأنيميشن)
+        const removeHandler = () => {
+          if (element && element.remove) element.remove();
+        };
+        element.addEventListener('animationend', removeHandler, { once: true });
+        
+        // دفع الجسيمات لمصفوفة إضافية (لإدارة حالات الطوارئ)
+        activeParticles.push(element);
+        
+        // تنظيف الصفيف عند إزالة العناصر
+        setTimeout(() => {
+          const index = activeParticles.indexOf(element);
+          if (index > -1) activeParticles.splice(index, 1);
+        }, duration * 1000 + 100);
+        
+        // حركة جانبية باستخدام قوة الانفجار (تطبيق translate إضافي عبر style)
+        const moveX = vx;
+        const moveY = vy;
+        let startTime = null;
+        
+        function animateMove(timestamp) {
+          if (!startTime) startTime = timestamp;
+          const elapsed = timestamp - startTime;
+          const progress = Math.min(elapsed / (duration * 1000), 1);
+          const dx = moveX * progress * 35;
+          const dy = moveY * progress * 35;
+          if (element) {
+            element.style.transform = `translate(${dx}px, ${dy}px) rotate(${rotStart + (rotEnd - rotStart) * progress}deg)`;
+            if (progress >= 0.98 && element.style.opacity !== '0') {
+              element.style.opacity = '0';
+            }
+          }
+          if (progress < 1 && element && element.parentNode) {
+            requestAnimationFrame(animateMove);
           }
         }
-      }, 1300);
+        requestAnimationFrame(animateMove);
+      }
       
-      // موجة ثانية: ومضات إضافية تشبه الألعاب النارية السريعة
-      continuousExplosion = setInterval(() => {
-        if (!sceneActive) return;
-        if (Math.random() > 0.65) {
-          const x = Math.random() * width;
-          const y = Math.random() * height * 0.8 + 50;
-          createExplosion(x, y, 0.6);
-        }
-      }, 450);
+      // إضافة تأثير وميض سريع (لإحساس انفجار 3D)
+      const flash = document.createElement('div');
+      flash.classList.add('flash-effect');
+      flash.style.left = x + 'px';
+      flash.style.top = y + 'px';
+      flash.style.transform = 'translate(-50%, -50%)';
+      document.body.appendChild(flash);
+      setTimeout(() => flash.remove(), 500);
     }
     
-    function stopBackgroundExplosions() {
-      if (explosionInterval) clearInterval(explosionInterval);
-      if (continuousExplosion) clearInterval(continuousExplosion);
-      explosionInterval = null;
-      continuousExplosion = null;
+    // انفجار خلفية عشوائي متكرر لكن خفيف
+    function randomExplosion() {
+      if (!sceneActive) return;
+      const randX = Math.random() * window.innerWidth;
+      const randY = Math.random() * window.innerHeight * 0.8 + 50;
+      const intensity = 0.6 + Math.random() * 1.0;
+      createExplosion(randX, randY, intensity);
     }
     
-    // إدارة الجسيمات وتحديثها ورسمها
-    function updateParticles() {
-      for (let i = particles.length-1; i >= 0; i--) {
-        const alive = particles[i].update();
-        if (!alive) {
-          particles.splice(i,1);
-        }
+    // انفجار احتفالي كبير حول البطاقة
+    function grandCelebration() {
+      if (!sceneActive) return;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2.2;
+      // 3 انفجارات متتالية سريعة
+      createExplosion(centerX, centerY, 1.4);
+      setTimeout(() => {
+        if(sceneActive) createExplosion(centerX - 70, centerY + 40, 1.2);
+      }, 80);
+      setTimeout(() => {
+        if(sceneActive) createExplosion(centerX + 80, centerY - 20, 1.2);
+      }, 160);
+      setTimeout(() => {
+        if(sceneActive) createExplosion(centerX + 20, centerY + 70, 1.1);
+      }, 250);
+    }
+    
+    // خلفية ثلاثية الأبعاد متحركة (خفيفة جداً)
+    function init3DBackground() {
+      const bgDiv = document.getElementById('bg3d');
+      let tick = 0;
+      function animateBackground() {
+        if (!bgDiv) return;
+        tick += 0.008;
+        const grad1 = `radial-gradient(circle at ${30 + Math.sin(tick) * 8}% ${40 + Math.cos(tick * 0.7) * 5}%, #2b164a, #0c0520)`;
+        const grad2 = `radial-gradient(circle at ${70 + Math.cos(tick * 0.5) * 12}% ${60 + Math.sin(tick * 0.9) * 8}%, #3a1c61, #03010f)`;
+        bgDiv.style.background = `${grad1}, ${grad2}`;
+        bgDiv.style.backgroundBlendMode = 'overlay';
+        requestAnimationFrame(animateBackground);
       }
+      animateBackground();
     }
     
-    function drawParticles() {
-      for (let p of particles) {
-        p.draw(ctx);
-      }
-    }
-    
-    // رسم خلفية متدرجة ونقاط ضوئية لتعميق الشعور 3D
-    function drawBackgroundGradient() {
-      const grad = ctx.createLinearGradient(0, 0, width*0.3, height);
-      grad.addColorStop(0, '#160b2e');
-      grad.addColorStop(0.5, '#2a1e44');
-      grad.addColorStop(1, '#0e0820');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, width, height);
-      
-      // نجوم صغيرة متحركة تُحاكي العمق
-      for (let i=0; i<200; i++) {
-        if (window.starCache) {
-          const s = window.starCache[i];
-          ctx.fillStyle = `rgba(255,220,150,${0.3+Math.sin(Date.now()*0.001 + i)*0.2})`;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-          ctx.fill();
-        }
-      }
-    }
-    
-    function initStars() {
-      window.starCache = [];
-      for (let i=0;i<250;i++) {
-        window.starCache.push({
-          x: Math.random() * 2000,
-          y: Math.random() * 1500,
-          r: Math.random() * 2 + 1
-        });
-      }
-    }
-    
-    function animateScene() {
-      if (!width || !height) return;
-      ctx.clearRect(0, 0, width, height);
-      drawBackgroundGradient();
-      updateParticles();
-      drawParticles();
-      requestAnimationFrame(animateScene);
-    }
-    
-    function resizeCanvas() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-      if (window.starCache) {
-        // إعادة توزيع النجوم للشاشة الجديدة
-        for (let s of window.starCache) {
-          s.x = Math.random() * width;
-          s.y = Math.random() * height;
-        }
-      }
-    }
-    
-    // بدء جميع المؤثرات البصرية وفتح الدعوة
+    // بدء المؤثرات والبطاقة
     window.startWedding = function() {
-      if (started) return;
-      started = true;
+      if (window._weddingStarted) return;
+      window._weddingStarted = true;
       
       // إخفاء شاشة البداية
       const startDiv = document.getElementById('startScreen');
       startDiv.style.opacity = '0';
       setTimeout(() => {
         startDiv.style.display = 'none';
-      }, 800);
+      }, 600);
       
-      // تشغيل الموسيقى (محاولة تلقائية بعد تفاعل المستخدم)
-      const audio = document.getElementById('weddingAudio');
-      audio.volume = 0.55;
-      audio.play().catch(e => console.log("الصوت يحتاج تفاعل, لكنه سيعمل بعد النقر"));
+      // تشغيل الموسيقى
+      const audio = document.getElementById('bgMusic');
+      audio.volume = 0.5;
+      audio.play().catch(e => console.log("موسيقى تحتاج تفاعل اضافي"));
       
-      // إظهار البطاقة
+      // إظهار بطاقة الدعوة
       const card = document.getElementById('card');
       card.classList.add('show');
       
-      // تفعيل المشهد ثلاثي الأبعاد والانفجارات
+      // تفعيل المشهد
       sceneActive = true;
       
-      // توليد انفجار احتفالي فوري حول البطاقة
+      // أول انفجار كبير احتفالي
       setTimeout(() => {
-        if (sceneActive) {
-          // انفجار مكثف في وسط الشاشة
-          createExplosion(width/2, height/2 + 30, 1.5);
-          // انفجارات جانبية تحاكي الألعاب النارية
-          for (let i=0; i<3; i++) {
-            setTimeout(() => {
-              if(sceneActive) createExplosion(width * 0.2 + Math.random() * width*0.6, height*0.3, 1.2);
-            }, i*160);
-          }
-          // انفجار على البطاقة نفسها (أعلى)
-          setTimeout(() => {
-            if(sceneActive) createExplosion(width/2, height*0.25, 1.3);
-          }, 400);
-        }
-      }, 100);
+        grandCelebration();
+      }, 150);
       
-      // تفعيل الانفجارات الدورية في الخلفية وكأنها مشهد 3D متواصل
-      startBackgroundFireworks();
-      
-      // انفجار إضافي كل 4 ثوانٍ ينفجر قرب زوايا مختلفة
-      let extraFire = setInterval(() => {
+      // انفجارات متقطعة ممتعة ولكن خفيفة (غير مثقلة)
+      if (explosionInterval) clearInterval(explosionInterval);
+      explosionInterval = setInterval(() => {
         if (sceneActive) {
-          const randX = Math.random() * width;
-          const randY = Math.random() * height;
-          createExplosion(randX, randY, 0.9);
+          randomExplosion();
+          // أحياناً انفجارين بشكل سريع
           if (Math.random() > 0.7) {
-            createExplosion(width - randX * 0.5, randY + 20, 0.8);
+            setTimeout(() => randomExplosion(), 180);
           }
         } else {
-          clearInterval(extraFire);
+          clearInterval(explosionInterval);
         }
-      }, 2100);
+      }, 1100);
       
-      // حفظ معرف لوقف الانفجارات عند الحاجة
-      window._extraInterval = extraFire;
+      // انفجارات إضافية في أركان الشاشة لجمال 3D
+      let cornerInterval = setInterval(() => {
+        if (!sceneActive) {
+          clearInterval(cornerInterval);
+          return;
+        }
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        if (Math.random() > 0.6) {
+          createExplosion(w * 0.15, h * 0.2, 0.7);
+        }
+        if (Math.random() > 0.6) {
+          createExplosion(w * 0.85, h * 0.75, 0.7);
+        }
+      }, 2700);
+      
+      window._cleanupIntervals = [explosionInterval, cornerInterval];
     };
     
-    // تحميل كل شيء
-    function init() {
-      initStars();
-      resizeCanvas();
-      window.addEventListener('resize', () => {
-        resizeCanvas();
-      });
-      animateScene();
-      
-      // جعل بداية هادئة لكن بإمكاننا إضافة جسيمات صغيرة متحركة وردية خلفية قبل البدء؟
-      // قبل البدء نعرض تأثيرات خفيفة جداً (حتى يكون الجو احتفالي)
-      setTimeout(() => {
-        if (!started) {
-          // بعض الجسيمات العائمة الهادئة لإغراء الزائر
-          for(let i=0;i<18;i++) {
-            let x = Math.random() * window.innerWidth;
-            let y = Math.random() * window.innerHeight;
-            let vx = (Math.random() - 0.5)*0.6;
-            let vy = (Math.random() - 0.8)*0.8;
-            let typeR = Math.random() > 0.6 ? 'heart' : 'flower';
-            let p = new Particle3D(x, y, vx, vy, typeR);
-            p.gravity = 0.03;
-            p.decay = 0.008;
-            p.life = 0.9;
-            particles.push(p);
-          }
-        }
-      }, 500);
-    }
+    // تنظيف عند مغادرة الصفحة (اختياري)
+    window.addEventListener('beforeunload', () => {
+      if (window._cleanupIntervals) {
+        window._cleanupIntervals.forEach(i => clearInterval(i));
+      }
+    });
     
-    let started = false;
-    init();
+    // إنشاء خلفية ثلاثية الأبعاد فورية
+    init3DBackground();
+    
+    // عمل قصاصات وردية خفيفة جداً في البداية لجذب العين دون ثقل
+    setTimeout(() => {
+      if (!window._weddingStarted) {
+        for (let i = 0; i < 12; i++) {
+          setTimeout(() => {
+            if (!window._weddingStarted) {
+              const randX = Math.random() * window.innerWidth;
+              const randY = Math.random() * window.innerHeight;
+              createExplosion(randX, randY, 0.45);
+            }
+          }, i * 300);
+        }
+      }
+    }, 300);
   })();
 </script>
 </body>
