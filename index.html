@@ -56,6 +56,7 @@ position:relative;
 perspective:1500px;
 }
 
+/* الغلاف */
 .cover{
 width:100%;
 height:100%;
@@ -65,6 +66,7 @@ transition:1.2s ease;
 border-radius:15px;
 overflow:hidden;
 box-shadow:0 10px 40px rgba(0,0,0,0.4);
+z-index:3;
 }
 
 .cover img{
@@ -83,34 +85,45 @@ transform:rotateY(-140deg);
 position:absolute;
 width:100%;
 height:100%;
-background:white;
+background:#fff;
 border-radius:15px;
 display:flex;
 justify-content:center;
 align-items:center;
 flex-direction:column;
+padding:15px;
 opacity:0;
-transform:scale(.8);
+transform:scale(.9);
 transition:1s;
-padding:20px;
-text-align:center;
+z-index:1;
 }
 
+/* عند الفتح يظهر الداخل */
 .book.open .inside{
 opacity:1;
 transform:scale(1);
 }
 
-/* نص داخلي */
+/* الصورة داخل الكتاب */
+.inside img{
+width:100%;
+max-height:260px;
+object-fit:contain;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+margin-bottom:10px;
+}
+
+/* نص */
 .inside h1{
 color:#b8860b;
-margin-bottom:10px;
+margin:10px 0;
 }
 
 .inside p{
 font-size:18px;
 color:#444;
-margin:6px 0;
+margin:5px 0;
 }
 
 /* قصاصات */
@@ -162,11 +175,16 @@ to{transform:scale(25);opacity:0;}
 <img src="invite.png">
 </div>
 
+<!-- الصورة أصبحت داخل الكتاب -->
 <div class="inside">
+
+<img src="invite.png">
+
 <h1>دعوة زفاف</h1>
 <p>يسرنا حضوركم لحفل الزفاف</p>
 <p>📅 7 حزيران 2026</p>
 <p>🕖 الساعة 7 مساءً</p>
+
 </div>
 
 </div>
