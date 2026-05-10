@@ -8,23 +8,18 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
 overflow:hidden;
 font-family:Tahoma;
-background:linear-gradient(135deg,#ffd6f6,#e0c3fc,#c2e9fb);
-background-size:400% 400%;
-animation:bgMove 12s ease infinite;
 height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-position:relative;
+background:linear-gradient(135deg,#ffd6f6,#e0c3fc,#c2e9fb);
+background-size:400% 400%;
+animation:bgMove 12s ease infinite;
 }
 
 @keyframes bgMove{
@@ -33,53 +28,89 @@ position:relative;
 100%{background-position:0% 50%;}
 }
 
+/* زر البداية */
+.start-screen{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:20;
+background:rgba(0,0,0,0.25);
+}
+
+.start-btn{
+padding:18px 40px;
+font-size:22px;
+border:none;
+border-radius:50px;
+cursor:pointer;
+color:white;
+background:linear-gradient(45deg,#ff66c4,#ffd700);
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+transition:.3s;
+}
+
+.start-btn:hover{transform:scale(1.1);}
+
+/* البطاقة */
 .card{
 width:90%;
 max-width:430px;
-max-height:90vh;
-overflow:hidden;
 background:rgba(255,255,255,0.95);
 border-radius:30px;
 text-align:center;
 border:5px solid gold;
 box-shadow:0 10px 40px rgba(0,0,0,0.25);
-position:relative;
+overflow:hidden;
 z-index:5;
-animation:showCard 1.5s ease;
+opacity:0;
+transform:translateY(60px) scale(.8);
+transition:1.2s ease;
 }
 
-@keyframes showCard{
-from{
-transform:scale(.5) rotate(-8deg);
-opacity:0;
-}
-to{
-transform:scale(1);
+.card.show{
 opacity:1;
-}
+transform:translateY(0) scale(1);
 }
 
 .card img{
 width:100%;
 max-height:300px;
 object-fit:cover;
-display:block;
 }
 
-.content{
-padding:18px;
-}
+.content{padding:18px;}
 
 h1{
 color:#b8860b;
-font-size:34px;
+font-size:36px;
 margin-bottom:10px;
+animation:fadeText 2s ease forwards;
 }
 
 p{
 font-size:20px;
 color:#444;
 margin:10px 0;
+opacity:0;
+animation:slideText 1.5s ease forwards;
+}
+
+p:nth-child(2){animation-delay:.5s;}
+p:nth-child(3){animation-delay:1s;}
+p:nth-child(4){animation-delay:1.5s;}
+p:nth-child(5){animation-delay:2s;}
+
+@keyframes fadeText{
+from{opacity:0;transform:scale(.5);}
+to{opacity:1;transform:scale(1);}
+}
+
+@keyframes slideText{
+from{opacity:0;transform:translateX(50px);}
+to{opacity:1;transform:translateX(0);}
 }
 
 .btn{
@@ -91,62 +122,37 @@ border-radius:50px;
 text-decoration:none;
 font-size:20px;
 margin-top:15px;
-transition:.3s;
 }
 
-.btn:hover{
-transform:scale(1.07);
-}
-
-.fall{
+/* قصاصات */
+.confetti{
 position:absolute;
-top:-50px;
-animation:fall linear infinite;
+width:8px;
+height:12px;
+animation:fall linear forwards;
 z-index:1;
 }
 
 @keyframes fall{
 to{
-transform:translateY(120vh) rotate(360deg);
-opacity:0;
-}
-}
-
-.confetti{
-position:absolute;
-width:12px;
-height:12px;
-animation:confettiFall linear forwards;
-}
-
-@keyframes confettiFall{
-0%{
-transform:translateY(-100px) rotate(0);
-opacity:1;
-}
-100%{
 transform:translateY(120vh) rotate(720deg);
 opacity:0;
 }
 }
 
+/* انفجار */
 .firework{
 position:absolute;
-width:8px;
-height:8px;
+width:4px;
+height:4px;
 border-radius:50%;
-animation:explode 1s ease-out forwards;
+animation:boom 1s ease-out forwards;
+z-index:1;
 }
 
-@keyframes explode{
-from{
-transform:scale(1);
-opacity:1;
-}
-to{
-transform:scale(18);
-opacity:0;
-}
+@keyframes boom{
+0%{transform:scale(1);}
+100%{transform:scale(30);opacity:0;}
 }
 
 </style>
@@ -154,7 +160,17 @@ opacity:0;
 
 <body>
 
-<div class="card">
+<!-- شاشة البداية -->
+<div class="start-screen" id="startScreen">
+<button class="start-btn" onclick="start()">🎉 فتح الدعوة</button>
+</div>
+
+<!-- موسيقى -->
+<audio id="music" loop>
+<source src="wedding.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card" id="card">
 
 <img src="invite.jpg">
 
@@ -163,113 +179,85 @@ opacity:0;
 <h1>دعوة زفاف</h1>
 
 <p>يسرنا دعوتكم لحضور حفل الزفاف</p>
-
 <p>📅 7 حزيران 2026</p>
-
 <p>🕖 الساعة 7 مساءً</p>
-
 <p>📍 صالة اثينا - مقابل شارع عثمان</p>
 
-<a class="btn" href="https://maps.google.com" target="_blank">
-عرض الموقع
-</a>
+<a class="btn" href="https://maps.google.com" target="_blank">عرض الموقع</a>
 
 </div>
 </div>
 
 <script>
 
-const flowers=['🌹','💖','🎊','🎉'];
+let started=false;
 
-function createFall(){
+/* تشغيل كل شيء بعد الضغط */
+function start(){
 
-const item=document.createElement('div');
+if(started) return;
+started=true;
 
-item.className='fall';
+document.getElementById("startScreen").style.display="none";
 
-item.innerHTML=
-flowers[Math.floor(Math.random()*flowers.length)];
+document.getElementById("card").classList.add("show");
 
-item.style.left=
-Math.random()*window.innerWidth+'px';
+/* تشغيل الموسيقى */
+document.getElementById("music").play();
 
-item.style.fontSize=
-(20+Math.random()*25)+'px';
-
-item.style.animationDuration=
-(5+Math.random()*5)+'s';
-
-document.body.appendChild(item);
-
-setTimeout(()=>{
-item.remove();
-},10000);
+/* تشغيل المؤثرات */
+setInterval(createConfetti,60);
+setInterval(firework,900);
 
 }
 
-setInterval(createFall,250);
-
+/* قصاصات ورقية */
 function createConfetti(){
 
-for(let i=0;i<120;i++){
+const c=document.createElement("div");
+c.className="confetti";
 
-const conf=document.createElement('div');
+c.style.left=Math.random()*window.innerWidth+"px";
+c.style.background=[
+"#ff66c4","#ffd700","#ffffff","#00e5ff","#c77dff"
+][Math.floor(Math.random()*5)];
 
-conf.className='confetti';
+c.style.animationDuration=(3+Math.random()*3)+"s";
 
-conf.style.left=
-Math.random()*window.innerWidth+'px';
+document.body.appendChild(c);
 
-conf.style.top='-20px';
-
-conf.style.background=
-['#ff66c4','#ffd700','#ffffff','#c77dff']
-[Math.floor(Math.random()*4)];
-
-conf.style.animationDuration=
-(3+Math.random()*4)+'s';
-
-document.body.appendChild(conf);
-
-setTimeout(()=>{
-conf.remove();
-},7000);
+setTimeout(()=>c.remove(),6000);
 
 }
 
-}
-
-createConfetti();
-
+/* انفجار ألعاب نارية دائرية */
 function firework(){
 
-for(let i=0;i<25;i++){
+const x=Math.random()*window.innerWidth;
+const y=Math.random()*window.innerHeight*0.6;
 
-const fw=document.createElement('div');
+for(let i=0;i<40;i++){
 
-fw.className='firework';
+const f=document.createElement("div");
+f.className="firework";
 
-fw.style.left=
-(Math.random()*window.innerWidth)+'px';
+const angle=Math.random()*2*Math.PI;
+const radius=Math.random()*120;
 
-fw.style.top=
-(Math.random()*window.innerHeight/2)+'px';
+f.style.left=(x + Math.cos(angle)*radius)+"px";
+f.style.top=(y + Math.sin(angle)*radius)+"px";
 
-fw.style.background=
-['#ff00aa','#ffd700','#ffffff','#c77dff']
-[Math.floor(Math.random()*4)];
+f.style.background=[
+"#ff0000","#ffd700","#ffffff","#00ffff","#ff66c4"
+][Math.floor(Math.random()*5)];
 
-document.body.appendChild(fw);
+document.body.appendChild(f);
 
-setTimeout(()=>{
-fw.remove();
-},1000);
-
-}
+setTimeout(()=>f.remove(),1000);
 
 }
 
-setInterval(firework,1500);
+}
 
 </script>
 
