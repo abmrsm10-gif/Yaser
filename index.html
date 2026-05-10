@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>دعوة زفاف ملكية 3D</title>
+<title>VIP Royal Wedding Invitation</title>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -14,8 +14,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(135deg, #f3e5f5, #e1bee7, #ce93d8);
-        perspective: 1500px; /* زيادة العمق للتأثير الثلاثي */
+        background: radial-gradient(circle, #f3e5f5 0%, #ce93d8 100%);
+        perspective: 2000px; /* زيادة المنظور لعمق أكبر */
     }
 
     .start-screen {
@@ -24,81 +24,114 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: rgba(74, 20, 140, 0.4);
-        backdrop-filter: blur(8px);
+        background: rgba(45, 0, 85, 0.7);
+        backdrop-filter: blur(15px);
         z-index: 1000;
-        transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .start-btn {
-        padding: 20px 50px;
-        font-size: 24px;
-        border: none;
-        border-radius: 50px;
+        padding: 25px 60px;
+        font-size: 28px;
+        border: 2px solid rgba(255, 215, 0, 0.5); /* إطار ذهبي خفيف */
+        border-radius: 60px;
         cursor: pointer;
         color: white;
-        background: linear-gradient(45deg, #9c27b0, #ba68c8);
-        box-shadow: 0 10px 20px rgba(156, 39, 176, 0.3);
+        background: linear-gradient(45deg, #4a148c, #9c27b0);
+        box-shadow: 0 0 30px rgba(156, 39, 176, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.3);
         font-weight: bold;
-        transition: 0.3s;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .start-btn:hover { transform: scale(1.1); background: #7b1fa2; }
+    .start-btn:hover { 
+        transform: scale(1.1) rotate(2deg); 
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+    }
 
-    /* حاوية الـ 3D المعدلة */
+    /* حاوية الـ VIP - تبدأ من بعيد جداً وصغيرة وضبابية */
     .card-container {
-        width: 80%; /* تصغير العرض بنسبة بسيطة لجمالية أفضل */
-        max-width: 340px; /* حجم مثالي للموبايل والكمبيوتر */
-        transition: transform 0.1s ease-out;
+        width: 85%;
+        max-width: 330px;
+        transition: transform 0.15s ease-out;
         transform-style: preserve-3d;
         z-index: 10;
         display: none;
         opacity: 0;
     }
 
-    /* كلاس التفعيل للأنيميشن */
     .card-container.reveal {
         display: block;
-        animation: royalPopup 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        animation: vipEntrance 2.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    /* هالة ذهبية خلف البطاقة */
+    .reveal::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120%;
+        height: 120%;
+        background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, transparent 70%);
+        transform: translate(-50%, -50%) translateZ(-100px);
+        filter: blur(20px);
+        animation: glowPulse 3s infinite alternate;
     }
 
     .card {
         background: white;
-        border-radius: 20px;
+        border-radius: 15px;
         overflow: hidden;
-        border: 5px solid #fff;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.2), 0 10px 20px rgba(156, 39, 176, 0.2);
+        border: 6px solid #fff;
+        box-shadow: 0 50px 100px rgba(0,0,0,0.3);
         transform: translateZ(50px);
         position: relative;
     }
 
     .card img {
         width: 100%;
-        max-height: 75vh; /* تصغير الطول لضمان عدم اختفاء الكلمات */
-        object-fit: contain; /* يحافظ على الكلمات داخل الصورة دون قص */
+        max-height: 70vh;
+        object-fit: contain;
         display: block;
         backface-visibility: hidden;
     }
 
-    /* تأثير اللمعان المتحرك */
+    /* تأثير اللمعان الفائق */
     .card::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(125deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
+        background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.7) 50%, transparent 65%);
         pointer-events: none;
-        animation: shine 3s infinite;
+        animation: superShine 4s infinite linear;
     }
 
-    /* أنيميشن الانبثاق الملكي */
-    @keyframes royalPopup {
-        0% { transform: scale(0.2) rotateX(-100deg) translateY(200px); opacity: 0; }
-        100% { transform: scale(1) rotateX(0deg) translateY(0); opacity: 1; }
+    /* أنيميشن الانبثاق من بعيد جداً */
+    @keyframes vipEntrance {
+        0% { 
+            transform: translateZ(-2000px) rotateY(180deg) rotateX(45deg); 
+            opacity: 0; 
+            filter: blur(20px);
+        }
+        50% {
+            opacity: 1;
+            filter: blur(5px);
+        }
+        100% { 
+            transform: translateZ(0) rotateY(0) rotateX(0); 
+            opacity: 1; 
+            filter: blur(0);
+        }
     }
 
-    @keyframes shine {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
+    @keyframes glowPulse {
+        from { transform: translate(-50%, -50%) translateZ(-100px) scale(0.9); opacity: 0.5; }
+        to { transform: translate(-50%, -50%) translateZ(-100px) scale(1.2); opacity: 0.8; }
+    }
+
+    @keyframes superShine {
+        0% { transform: translateX(-200%) skewX(-30deg); }
+        100% { transform: translateX(200%) skewX(-30deg); }
     }
 
     canvas {
@@ -115,7 +148,7 @@
 <body>
 
 <div class="start-screen" id="startScreen">
-    <button class="start-btn" onclick="startApp()">🎉 فتح الدعوة الملكية</button>
+    <button class="start-btn" onclick="startApp()">✨ فتح الدعوة الملكية VIP</button>
 </div>
 
 <canvas id="canvas"></canvas>
@@ -145,23 +178,20 @@ resize();
 
 class Particle {
     constructor(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.size = Math.random() * 7 + 3;
-        this.speedX = Math.random() * 12 - 6;
-        this.speedY = Math.random() * -15 - 5;
-        this.gravity = 0.25;
+        this.x = x; this.y = y; this.color = color;
+        this.size = Math.random() * 8 + 4;
+        this.speedX = Math.random() * 14 - 7;
+        this.speedY = Math.random() * -18 - 8;
+        this.gravity = 0.2;
         this.rotation = Math.random() * 360;
-        this.rotationSpeed = Math.random() * 15 - 7.5;
+        this.rotationSpeed = Math.random() * 20 - 10;
         this.opacity = 1;
     }
     update() {
         this.speedY += this.gravity;
-        this.x += this.speedX;
-        this.y += this.speedY;
+        this.x += this.speedX; this.y += this.speedY;
         this.rotation += this.rotationSpeed;
-        this.opacity -= 0.008;
+        this.opacity -= 0.006;
     }
     draw() {
         ctx.save();
@@ -169,16 +199,18 @@ class Particle {
         ctx.rotate(this.rotation * Math.PI / 180);
         ctx.globalAlpha = this.opacity;
         ctx.fillStyle = this.color;
-        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size * 1.5);
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = this.color;
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
         ctx.restore();
     }
 }
 
 function createExplosion() {
-    const colors = ['#8e24aa', '#d81b60', '#ffd700', '#ffffff', '#e1bee7'];
+    const colors = ['#ffd700', '#ffffff', '#9c27b0', '#e1bee7', '#ffeb3b'];
     const x = Math.random() * canvas.width;
     const y = canvas.height + 20;
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 50; i++) {
         particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
     }
 }
@@ -186,49 +218,43 @@ function createExplosion() {
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach((p, i) => {
-        p.update();
-        p.draw();
+        p.update(); p.draw();
         if (p.opacity <= 0) particles.splice(i, 1);
     });
-    
-    if (Math.random() < 0.12) createExplosion();
+    if (Math.random() < 0.15) createExplosion();
     requestAnimationFrame(animate);
 }
 
 function startApp() {
-    // إخفاء شاشة البداية
     const screen = document.getElementById('startScreen');
     screen.style.opacity = '0';
     
     setTimeout(() => {
         screen.style.display = 'none';
-        
-        // تفعيل الدعوة مع الأنيميشن الجديد
         container.style.display = 'block';
         setTimeout(() => {
             container.classList.add('reveal');
-        }, 50);
+        }, 100);
 
-        // تشغيل الموسيقى والاحتفال
         const music = document.getElementById('music');
-        music.play().catch(e => console.log("المتصفح حظر التشغيل التلقائي"));
+        music.play().catch(() => {});
         animate();
-    }, 800);
+    }, 1000);
 }
 
-// تفاعل الـ 3D الذكي
+// تحكم 3D ناعم جداً
 document.addEventListener('mousemove', (e) => {
     if(container.classList.contains('reveal')) {
-        let xAxis = (window.innerWidth / 2 - e.pageX) / 20;
-        let yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+        let xAxis = (window.innerWidth / 2 - e.pageX) / 15;
+        let yAxis = (window.innerHeight / 2 - e.pageY) / 15;
         container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
     }
 });
 
 document.addEventListener('touchmove', (e) => {
     let touch = e.touches[0];
-    let xAxis = (window.innerWidth / 2 - touch.pageX) / 20;
-    let yAxis = (window.innerHeight / 2 - touch.pageY) / 20;
+    let xAxis = (window.innerWidth / 2 - touch.pageX) / 15;
+    let yAxis = (window.innerHeight / 2 - touch.pageY) / 15;
     container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
 });
 </script>
